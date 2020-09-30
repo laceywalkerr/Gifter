@@ -170,7 +170,7 @@ namespace Gifter.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT p.Id AS PostId, p.Title, p.Caption, up.DateCreated AS PostDateCreated,
+                        SELECT p.Id AS PostId, p.Title, p.Caption, p.DateCreated AS PostDateCreated,
                                p.ImageUrl AS PostImageUrl, p.UserProfileId AS PostUserProfileId,
 
                                up.Name, up.Bio, up.Email, up.DateCreated AS UserProfileDateCreated,

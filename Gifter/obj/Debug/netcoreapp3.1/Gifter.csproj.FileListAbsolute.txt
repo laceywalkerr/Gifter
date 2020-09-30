@@ -1,0 +1,10 @@
+C:\Users\Lacey\workspace\Gifter\Gifter\bin\Debug\netcoreapp3.1\appsettings.Development.json
+C:\Users\Lacey\workspace\Gifter\Gifter\bin\Debug\netcoreapp3.1\appsettings.json
+C:\Users\Lacey\workspace\Gifter\Gifter\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
+C:\Users\Lacey\workspace\Gifter\Gifter\bin\Debug\netcoreapp3.1\Gifter.exe
+C:\Users\Lacey\workspace\Gifter\Gifter\obj\Debug\netcoreapp3.1\Gifter.csprojAssemblyReference.cache
+C:\Users\Lacey\workspace\Gifter\Gifter\obj\Debug\netcoreapp3.1\Gifter.AssemblyInfoInputs.cache
+C:\Users\Lacey\workspace\Gifter\Gifter\obj\Debug\netcoreapp3.1\Gifter.AssemblyInfo.cs
+C:\Users\Lacey\workspace\Gifter\Gifter\obj\Debug\netcoreapp3.1\Gifter.RazorTargetAssemblyInfo.cache
+C:\Users\Lacey\workspace\Gifter\Gifter\obj\Debug\netcoreapp3.1\staticwebassets\Gifter.StaticWebAssets.Manifest.cache
+C:\Users\Lacey\workspace\Gifter\Gifter\obj\Debug\netcoreapp3.1\staticwebassets\Gifter.StaticWebAssets.xml

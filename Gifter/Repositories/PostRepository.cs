@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Gifter.Models;
 using Gifter.Utils;
+using System.Runtime.CompilerServices;
 
 namespace Gifter.Repositories
 {
@@ -264,7 +265,8 @@ namespace Gifter.Repositories
                        c.Id AS CommentId, c.UserProfileId, c.Message, c.PostId AS CommentPostId
                        
                        FROM Post p
-                       LEFT JOIN Comment c ON c.Id = PostId
+                       LEFT JOIN Comment c ON c.Id = p.Id
+
                        ";
 
                     DbUtils.AddParameter(cmd, "@PostId", id);
@@ -274,24 +276,23 @@ namespace Gifter.Repositories
                     Post post = null;
                     if (reader.Read())
                     {
-                        post = new Post()
+                        Comment comment = new Comment()
                         {
-                            PostId = id,
-                            Title = DbUtils.GetString(reader, "Title"),
-                            Caption = DbUtils.GetString(reader, "Caption"),
-                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
-                            ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                            Id = DbUtils.GetInt(reader, "CommentId"),
                             UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                            PostId = DbUtils.GetInt(reader, "CommentPostId"),
+                            Message = DbUtils.GetString(reader, "UserProfileDateCreated"),
+                            
 
-                            comment = new Comment()
+                            Post = new Post()
                             {
-                                Id = DbUtils.GetInt(reader, "UserProfileId"),
-                                Name = DbUtils.GetString(reader, "Name"),
-                                Email = DbUtils.GetString(reader, "Email"),
-                                DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
-                                ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                                Id = id,
+                                Title = DbUtils.GetString(reader, "Title"),
+                                Caption = DbUtils.GetString(reader, "Caption"),
+                                DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
+                                ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
                             },
-
                         };
                     }
 

@@ -261,7 +261,7 @@ namespace Gifter.Repositories
                        SELECT p.Id AS PostId, p.Title, p.Caption, p.DateCreated, 
                        p.ImageUrl, p.UserProfileId AS PostUserProfileId,
 
-                       c.Id AS CommentId, c.UserProfileId, c.Message, c.PostId 
+                       c.Id AS CommentId, c.UserProfileId, c.Message, c.PostId AS CommentPostId
                        
                        FROM Post p
                        LEFT JOIN Comment c ON c.Id = PostId

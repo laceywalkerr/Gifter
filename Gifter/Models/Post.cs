@@ -26,5 +26,7 @@ namespace Gifter.Models
 
         public List<Comment> Comments { get; set; }
 
+        public int GetPostByIdWithComments { get; set;}
+
     }
 }

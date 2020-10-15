@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Gifter.Models;
 using Gifter.Utils;
-using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Configuration;
 
 namespace Gifter.Repositories
 {
@@ -15,10 +15,10 @@ namespace Gifter.Repositories
 
         public List<Post> GetAll()
         {
-            using (var conn = Connection)
+            using(var conn = Connection)
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using(var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                        SELECT p.Id AS PostId, p.Title, p.Caption, p.DateCreated AS PostDateCreated, 
@@ -38,19 +38,19 @@ namespace Gifter.Repositories
                         posts.Add(new Post()
                         {
                             Id = DbUtils.GetInt(reader, "PostId"),
-                            Title = DbUtils.GetString(reader, "Title"),
-                            Caption = DbUtils.GetString(reader, "Caption"),
-                            DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
-                            ImageUrl = DbUtils.GetString(reader, "PostImageUrl"),
-                            UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
-                            UserProfile = new UserProfile()
-                            {
-                                Id = DbUtils.GetInt(reader, "UserProfileId"),
-                                Name = DbUtils.GetString(reader, "Name"),
-                                Email = DbUtils.GetString(reader, "Email"),
-                                DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
-                                ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
-                            },
+                                Title = DbUtils.GetString(reader, "Title"),
+                                Caption = DbUtils.GetString(reader, "Caption"),
+                                DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
+                                ImageUrl = DbUtils.GetString(reader, "PostImageUrl"),
+                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                                UserProfile = new UserProfile()
+                                {
+                                    Id = DbUtils.GetInt(reader, "UserProfileId"),
+                                        Name = DbUtils.GetString(reader, "Name"),
+                                        Email = DbUtils.GetString(reader, "Email"),
+                                        DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                        ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                                },
                         });
                     }
 
@@ -63,10 +63,10 @@ namespace Gifter.Repositories
 
         public Post GetById(int id)
         {
-            using (var conn = Connection)
+            using(var conn = Connection)
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using(var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                        SELECT p.Id AS PostId, p.Title, p.Caption, p.DateCreated AS PostDateCreated, 
@@ -77,8 +77,6 @@ namespace Gifter.Repositories
                        FROM Post p
                        LEFT JOIN UserProfile up ON p.UserProfileId = up.id
                        ORDER BY p.DateCreated";
-
-                        
 
                     DbUtils.AddParameter(cmd, "@Id", id);
 
@@ -98,11 +96,11 @@ namespace Gifter.Repositories
 
                             UserProfile = new UserProfile()
                             {
-                                Id = DbUtils.GetInt(reader, "UserProfileId"),
-                                Name = DbUtils.GetString(reader, "Name"),
-                                Email = DbUtils.GetString(reader, "Email"),
-                                DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
-                                ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                            Id = DbUtils.GetInt(reader, "UserProfileId"),
+                            Name = DbUtils.GetString(reader, "Name"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                            ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
                             },
 
                         };
@@ -117,33 +115,33 @@ namespace Gifter.Repositories
 
         public void Add(Post post)
         {
-            using (var conn = Connection)
+            using(var conn = Connection)
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using(var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO Post (Title, Caption, DateCreated, ImageUrl, UserProfileId)
+                        INSERT INTO Post (Title, Caption, DateCreated, ImageUrl, FirebaseUserId)
                         OUTPUT INSERTED.ID
-                        VALUES (@Title, @Caption, @DateCreated, @ImageUrl, @UserProfileId)";
+                        VALUES (@Title, @Caption, @DateCreated, @ImageUrl, @FirebaseUserId)";
 
                     DbUtils.AddParameter(cmd, "@Title", post.Title);
                     DbUtils.AddParameter(cmd, "@Caption", post.Caption);
                     DbUtils.AddParameter(cmd, "@DateCreated", post.DateCreated);
                     DbUtils.AddParameter(cmd, "@ImageUrl", post.ImageUrl);
-                    DbUtils.AddParameter(cmd, "@UserProfileId", post.UserProfileId);
+                    DbUtils.AddParameter(cmd, "@UserProfileId", post.FirebaseUserId);
 
-                    post.Id = (int)cmd.ExecuteScalar();
+                    post.Id = (int) cmd.ExecuteScalar();
                 }
             }
         }
 
         public void Update(Post post)
         {
-            using (var conn = Connection)
+            using(var conn = Connection)
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using(var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                         UPDATE Post
@@ -168,10 +166,10 @@ namespace Gifter.Repositories
 
         public void Delete(int id)
         {
-            using (var conn = Connection)
+            using(var conn = Connection)
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using(var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "DELETE FROM Post WHERE Id = @Id";
                     DbUtils.AddParameter(cmd, "@id", id);
@@ -182,10 +180,10 @@ namespace Gifter.Repositories
 
         public List<Post> GetAllWithComments()
         {
-            using (var conn = Connection)
+            using(var conn = Connection)
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using(var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                         SELECT p.Id AS PostId, p.Title, p.Caption, p.DateCreated AS PostDateCreated,
@@ -212,21 +210,21 @@ namespace Gifter.Repositories
                         {
                             existingPost = new Post()
                             {
-                                Id = postId,
-                                Title = DbUtils.GetString(reader, "Title"),
-                                Caption = DbUtils.GetString(reader, "Caption"),
-                                DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
-                                ImageUrl = DbUtils.GetString(reader, "PostImageUrl"),
-                                UserProfileId = DbUtils.GetInt(reader, "PostUserProfileId"),
-                                UserProfile = new UserProfile()
-                                {
-                                    Id = DbUtils.GetInt(reader, "PostUserProfileId"),
-                                    Name = DbUtils.GetString(reader, "Name"),
-                                    Email = DbUtils.GetString(reader, "Email"),
-                                    DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
-                                    ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
-                                },
-                                Comments = new List<Comment>()
+                            Id = postId,
+                            Title = DbUtils.GetString(reader, "Title"),
+                            Caption = DbUtils.GetString(reader, "Caption"),
+                            DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
+                            ImageUrl = DbUtils.GetString(reader, "PostImageUrl"),
+                            UserProfileId = DbUtils.GetInt(reader, "PostUserProfileId"),
+                            UserProfile = new UserProfile()
+                            {
+                            Id = DbUtils.GetInt(reader, "PostUserProfileId"),
+                            Name = DbUtils.GetString(reader, "Name"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                            ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                            },
+                            Comments = new List<Comment>()
                             };
 
                             posts.Add(existingPost);
@@ -237,9 +235,9 @@ namespace Gifter.Repositories
                             existingPost.Comments.Add(new Comment()
                             {
                                 Id = DbUtils.GetInt(reader, "CommentId"),
-                                Message = DbUtils.GetString(reader, "Message"),
-                                PostId = postId,
-                                UserProfileId = DbUtils.GetInt(reader, "CommentUserProfileId")
+                                    Message = DbUtils.GetString(reader, "Message"),
+                                    PostId = postId,
+                                    UserProfileId = DbUtils.GetInt(reader, "CommentUserProfileId")
                             });
                         }
                     }
@@ -253,10 +251,10 @@ namespace Gifter.Repositories
 
         public Post GetPostByIdWithComments(int id)
         {
-            using (var conn = Connection)
+            using(var conn = Connection)
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using(var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                        SELECT p.Id AS PostId, p.Title, p.Caption, p.DateCreated, 
@@ -282,16 +280,15 @@ namespace Gifter.Repositories
                             UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
                             PostId = DbUtils.GetInt(reader, "CommentPostId"),
                             Message = DbUtils.GetString(reader, "UserProfileDateCreated"),
-                            
 
                             Post = new Post()
                             {
-                                Id = id,
-                                Title = DbUtils.GetString(reader, "Title"),
-                                Caption = DbUtils.GetString(reader, "Caption"),
-                                DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
-                                ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
-                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                            Id = id,
+                            Title = DbUtils.GetString(reader, "Title"),
+                            Caption = DbUtils.GetString(reader, "Caption"),
+                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
+                            ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                            UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
                             },
                         };
                     }

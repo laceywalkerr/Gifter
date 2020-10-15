@@ -22,11 +22,13 @@ namespace Gifter.Models
         [Required]
         public int UserProfileId { get; set; }
 
+        public string FirebaseUserId { get; set; }
+
         public UserProfile UserProfile { get; set; }
 
         public List<Comment> Comments { get; set; }
 
-        public int GetPostByIdWithComments { get; set;}
+        public int GetPostByIdWithComments { get; set; }
 
     }
 }
